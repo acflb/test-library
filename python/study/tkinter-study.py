@@ -60,5 +60,20 @@ def close():
 # 传递函数引用，不加括号；当用户点击关闭按钮时才执行;加括号执行一次
 a1.protocol('WM_DELETE_WINDOW', close)
 
+
+# 11. 标签组件
+a2 = tk.Label(a1, text='ai', font=('黑体', 26), fg='white', bg='black')
+
+# 12.1 填充布局 pack() 默认布局:默认字体水平居中
+# a2.pack()
+
+# 12.2 自定义布局 place(),注意不要超过窗口范围
+# a2.place(x=100, y=100)
+
+# 12.3 网格布局 grid()
+a2.grid(row=1, column=1)
+a2 = tk.Label(a1, text='ai', font=('黑体', 26), fg='white', bg='black')
+a2.grid(row=2, column=2)
+
 # 开启窗口/主循环；所有窗口信息在窗口开启前执行
 a1.mainloop()

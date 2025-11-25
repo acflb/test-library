@@ -228,13 +228,15 @@ class PDFCropTool:
         self.canvas.delete("all")
         self.img_x = (self.canvas.winfo_width() - self.page_image.width) // 2
         self.img_y = (self.canvas.winfo_height() - self.page_image.height) // 2
-        self.canvas.create_image(self.img_x, self.img_y, anchor=tk.NW, image=self.photo)
+        self.canvas.create_image(
+            self.img_x, self.img_y, anchor=tk.NW, image=self.photo)
 
         # 绘制裁剪线
         self.draw_crop_lines()
 
         # 更新页码
-        self.page_label.config(text=f"{self.current_page + 1}/{self.total_pages}页")
+        self.page_label.config(
+            text=f"{self.current_page + 1}/{self.total_pages}页")
 
     def draw_crop_lines(self):
         if not self.page_image:
@@ -403,7 +405,8 @@ class PDFCropTool:
 
             for spage in self.pdf_doc:
                 r = spage.rect
-                d = pymupdf.Rect(spage.cropbox_position, spage.cropbox_position)
+                d = pymupdf.Rect(spage.cropbox_position,
+                                 spage.cropbox_position)
 
                 # 生成裁剪矩形列表
                 v_positions = [0] + sorted(self.v_lines) + [1]
@@ -419,7 +422,8 @@ class PDFCropTool:
 
                         rx = pymupdf.Rect(x0, y0, x1, y1) + d
 
-                        page = doc.new_page(-1, width=rx.width, height=rx.height)
+                        page = doc.new_page(-1, width=rx.width,
+                                            height=rx.height)
                         page.show_pdf_page(
                             page.rect, self.pdf_doc, spage.number, clip=rx
                         )

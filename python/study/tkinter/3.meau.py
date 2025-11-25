@@ -1,4 +1,3 @@
-from statistics import variance
 import tkinter as tk
 from tkinter.ttk import Combobox
 from tkinter import END

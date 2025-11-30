@@ -46,7 +46,6 @@ def add(master_menu):
     # 创建下拉列表(组合框)
     child_lower = Combobox(child_menu, width=10, textvariable=child_choose,
                            values=child_nums, font=('楷体', 16))
-
     child_lower.place(x=80, y=10)
 
     # 设置默认值
@@ -66,10 +65,8 @@ def add(master_menu):
 
     # 创建单选框
         # 注：这里的value值为英文时（male,female），会出现两个都选中的情况
-    tk.Radiobutton(child_menu,  font=('楷体', 16),
-                   variable=child_radio, text='男', value='男').place(x=80, y=50)
-    tk.Radiobutton(child_menu,  font=('楷体', 16),
-                   variable=child_radio, text='女', value='女').place(x=150, y=50)
+    tk.Radiobutton(child_menu,  font=('楷体', 16),variable=child_radio, text='男', value='男').place(x=80, y=50)
+    tk.Radiobutton(child_menu,  font=('楷体', 16),variable=child_radio, text='女', value='女').place(x=150, y=50)
 
     # 创建多选框
     # 整数变量

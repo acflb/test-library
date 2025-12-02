@@ -16,39 +16,40 @@ class Counter(tk.Frame):  # 继承 tk.Frame
         self.a = 0
         self.b = 0
         self.symbol = None
+        self.cache = 1
 
         # sticky="nsew" = 拉伸填充;columnspan=4 = 这个元素横跨4列（显示屏要铺满）
         self.display.grid(row=0, column=0, columnspan=4, sticky="nsew")
 
         def result():
+            self.b = self.display.get()
             if self.symbol == '+':
-                self.c.set(str(self.a + self.b))
+                self.c.set(str(int(self.a) + int(self.b)))
                 self.symbol = None
             elif self.symbol == '-':
-                self.c.set(str(self.a - self.b))
+                self.c.set(str(int(self.a) - int(self.b)))
                 self.symbol = None
             elif self.symbol == 'x':
-                self.c.set(str(self.a * self.b))
+                self.c.set(str(int(self.a) * int(self.b)))
                 self.symbol = None
             elif self.symbol == '/':
-                self.c.set(str(self.a / self.b))
+                self.c.set(str(int(self.a) / int(self.b)))
                 self.symbol = None
+            self.cache = 1
 
         def change_symbol(a):
             self.symbol = a
+            self.cache = 1
+            self.a = self.display.get()
 
         def click(a):
             print(self.symbol)
-            if self.symbol is None:
-                # self.c.set(str(a))
-                # 清空显示，然后插入数字
+            if self.cache:
                 self.display.delete(0, tk.END)
-                self.c.get()
-                self.display.insert(0, a)
-                self.a = a
-            else:
-                self.c.set(str(a))
-                self.b = a
+                # 清空显示，然后插入数字
+                self.cache = 0
+            # self.c.set(str(a))
+            self.display.insert(tk.END, a)
             print("a:", self.a)
             print("b:", self.b)
             print("symbol", self.c.get())

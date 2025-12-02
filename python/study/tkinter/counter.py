@@ -4,22 +4,44 @@ import tkinter as tk
 class Counter(tk.Frame):  # 继承 tk.Frame
     # '__init__'是 Python 类的构造函数（初始化方法），用于创建对象时自动执行初始化操作
     def __init__(self, master):  # 添加 master 参数
-        super().__init__(master)  # 调用父类初始化
-        self.pack()  # 将 Frame 添加到父窗口
 
+        super().__init__(master, bg='#251f1a')  # 调用父类初始化
+
+        # 调用tkinter上的pack布局方法，fill:填充布局；expand:当有可用空间时，也随之扩大；padx:x方向两侧填充10px；pady：y方向两侧填充10px
+        self.pack(fill='both', expand=True, padx=4, pady=4)
+
+        # 配置网格权重，使按钮能自适应大小
+        for i in range(5):
+            self.grid_rowconfigure(i, weight=1)
+        for i in range(4):
+            self.grid_columnconfigure(i, weight=1)
         self.c = tk.StringVar(value='0')
 
         # 显示区域
-        self.display = tk.Entry(self, textvariable=self.c)
+        self.display = tk.Entry(
+            self,
+            textvariable=self.c,
+            font=('Arial', 28, 'bold'),
+            bg='#251f1a',
+            fg='#ffffff',
+            bd=0,
+            justify='right',
+            relief='flat',
+            insertwidth=0
+        )
 
-        self.master.geometry('340x500')
+        self.master.title('计算器')
+        self.master.geometry('328x500')
+        self.master.configure(bg='#251f1a')
+
         self.a = 0
         self.b = 0
         self.symbol = None
         self.cache = 1
 
         # sticky="nsew" = 拉伸填充;columnspan=4 = 这个元素横跨4列（显示屏要铺满）
-        self.display.grid(row=0, column=0, columnspan=4, sticky="nsew")
+        self.display.grid(row=0, column=0, columnspan=4,
+                          sticky="nsew", padx=8, pady=5)
 
         def result():
             self.b = self.display.get()
@@ -43,16 +65,12 @@ class Counter(tk.Frame):  # 继承 tk.Frame
             self.a = self.display.get()
 
         def click(a):
-            print(self.symbol)
             if self.cache:
                 self.display.delete(0, tk.END)
                 # 清空显示，然后插入数字
                 self.cache = 0
             # self.c.set(str(a))
             self.display.insert(tk.END, a)
-            print("a:", self.a)
-            print("b:", self.b)
-            print("symbol", self.c.get())
 
         # 按钮
         # 第二行：7 8 9 ÷

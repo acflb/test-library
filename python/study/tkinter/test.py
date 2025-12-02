@@ -1,81 +1,182 @@
-# 设置库别名
-import sys
-import os
 import tkinter as tk
 
-# 窗口创建
-w1 = tk.Tk()
 
-# 获取用户分辨率(宽,高)
-w2 = w1.maxsize()
-w, h = w2
+class Counter(tk.Frame):
+    def __init__(self, master):
+        super().__init__(master, bg='#2b2b2b')  # 深色背景
+        self.pack(fill='both', expand=True, padx=10, pady=10)
 
-# 窗口大小(宽x高+x轴偏移+y轴偏移)
-# w1.geometry('300x300+600+600')
-# 窗口居中
-w1.geometry(f'{int(w * 0.5)}x{int(h * 0.5)}+{int(w*0.25)}+{int(h * 0.25)}')
+        self.c = tk.StringVar(value='0')
 
-# 窗口缩放是否允许(宽,高),默认`true`允许
-w1.resizable(False, False)
+        # 配置网格权重，使按钮能自适应大小
+        for i in range(5):
+            self.grid_rowconfigure(i, weight=1)
+        for i in range(4):
+            self.grid_columnconfigure(i, weight=1)
 
-# 窗口图标设置
+        # 显示区域 - 优化样式
+        self.display = tk.Entry(
+            self,
+            textvariable=self.c,
+            font=('Arial', 28, 'bold'),  # 大字体
+            bg='#1a1a1a',  # 深灰背景
+            fg='#ffffff',  # 白色文字
+            bd=0,  # 无边框
+            justify='right',  # 右对齐
+            relief='flat',  # 平面样式
+            insertbackground='#ffffff'  # 光标颜色
+        )
+
+        self.master.title('计算器')
+        self.master.geometry('400x550')
+        self.master.resizable(False, False)  # 禁止调整大小
+        self.master.configure(bg='#2b2b2b')
+
+        self.a = 0
+        self.b = 0
+        self.symbol = None
+        self.cache = 1
+
+        # 显示区域占据第一行，增加高度
+        self.display.grid(row=0, column=0, columnspan=4,
+                          sticky="nsew", padx=5, pady=5, ipady=20)
+
+        def result():
+            self.b = self.display.get()
+            if self.symbol == '+':
+                self.c.set(str(float(self.a) + float(self.b)))
+                self.symbol = None
+            elif self.symbol == '-':
+                self.c.set(str(float(self.a) - float(self.b)))
+                self.symbol = None
+            elif self.symbol == 'x':
+                self.c.set(str(float(self.a) * float(self.b)))
+                self.symbol = None
+            elif self.symbol == '/':
+                self.c.set(str(float(self.a) / float(self.b)))
+                self.symbol = None
+            self.cache = 1
+
+        def change_symbol(a):
+            self.symbol = a
+            self.cache = 1
+            self.a = self.display.get()
+
+        def click(a):
+            if self.cache:
+                self.display.delete(0, tk.END)
+                self.cache = 0
+            self.display.insert(tk.END, a)
+
+        def clear():
+            self.c.set('0')
+            self.a = 0
+            self.b = 0
+            self.symbol = None
+            self.cache = 1
+
+        # 定义按钮样式
+        num_style = {
+            'font': ('Arial', 20, 'bold'),
+            'bg': '#404040',
+            'fg': '#ffffff',
+            'bd': 0,
+            'activebackground': '#505050',
+            'activeforeground': '#ffffff',
+            'relief': 'flat'
+        }
+
+        operator_style = {
+            'font': ('Arial', 20, 'bold'),
+            'bg': '#ff9500',
+            'fg': '#ffffff',
+            'bd': 0,
+            'activebackground': '#ffb143',
+            'activeforeground': '#ffffff',
+            'relief': 'flat'
+        }
+
+        equal_style = {
+            'font': ('Arial', 20, 'bold'),
+            'bg': '#34c759',
+            'fg': '#ffffff',
+            'bd': 0,
+            'activebackground': '#5dd879',
+            'activeforeground': '#ffffff',
+            'relief': 'flat'
+        }
+
+        clear_style = {
+            'font': ('Arial', 20, 'bold'),
+            'bg': '#d1d1d6',
+            'fg': '#000000',
+            'bd': 0,
+            'activebackground': '#e5e5ea',
+            'activeforeground': '#000000',
+            'relief': 'flat'
+        }
+
+        # 第一行：C 按钮
+        tk.Button(self, command=clear, text="C", **clear_style).grid(
+            row=1, column=0, columnspan=3, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: change_symbol('/'),
+                  text="÷", **operator_style).grid(
+            row=1, column=3, sticky="nsew", padx=2, pady=2)
+
+        # 第二行：7 8 9 +
+        tk.Button(self, command=lambda: click(7),
+                  text="7", **num_style).grid(
+            row=2, column=0, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: click(8),
+                  text="8", **num_style).grid(
+            row=2, column=1, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: click(9),
+                  text="9", **num_style).grid(
+            row=2, column=2, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: change_symbol('x'),
+                  text="×", **operator_style).grid(
+            row=2, column=3, sticky="nsew", padx=2, pady=2)
+
+        # 第三行：4 5 6 -
+        tk.Button(self, command=lambda: click(4),
+                  text="4", **num_style).grid(
+            row=3, column=0, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: click(5),
+                  text="5", **num_style).grid(
+            row=3, column=1, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: click(6),
+                  text="6", **num_style).grid(
+            row=3, column=2, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: change_symbol('-'),
+                  text="−", **operator_style).grid(
+            row=3, column=3, sticky="nsew", padx=2, pady=2)
+
+        # 第四行：1 2 3 +
+        tk.Button(self, command=lambda: click(1),
+                  text="1", **num_style).grid(
+            row=4, column=0, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: click(2),
+                  text="2", **num_style).grid(
+            row=4, column=1, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: click(3),
+                  text="3", **num_style).grid(
+            row=4, column=2, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: change_symbol('+'),
+                  text="+", **operator_style).grid(
+            row=4, column=3, sticky="nsew", padx=2, pady=2)
+
+        # 第五行：0 . =
+        tk.Button(self, command=lambda: click(0),
+                  text="0", **num_style).grid(
+            row=5, column=0, columnspan=2, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: click('.'),
+                  text=".", **num_style).grid(
+            row=5, column=2, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=result,
+                  text="=", **equal_style).grid(
+            row=5, column=3, sticky="nsew", padx=2, pady=2)
 
 
-def resource_path(relative_path):
-    """
-    获取资源的绝对路径，打包后使用临时目录，开发时使用原始路径
-    """
-    # hasattr函数：检查sys模块是否有_MEIPASS
-    if hasattr(sys, '_MEIPASS'):
-        base_path = sys._MEIPASS
-    else:
-        # "__file__" 是一个特殊变量,指向当前脚本文件所在的目录
-        # dirname返回路径中目录部分；abspath返回当前绝对路径
-        base_path = os.path.dirname(os.path.abspath(__file__))
-
-        # 将脚本目录和图标文件名组合成一个完整的路径
-    return os.path.join(base_path, relative_path)
-
-
-icon_path = resource_path('test.ico')
-
-# 使用转义字符----'r'解析绝对路径
-# w1.iconbitmap(r'C:\Users\xxxx\test.ico')
-
-w1.iconbitmap(icon_path)
-
-# 窗口背景色(也可设置为bg='blue')
-w1.configure(bg='#000')
-
-# 窗口透明度(0~1)
-w1.attributes('-alpha', 0.5)
-
-# 窗口置顶
-w1.attributes('-topmost', True)
-
-# 窗口关闭
-
-
-def close():
-    w1.destroy()
-
-
-w1.protocol('WM_DELETE_WINDOW', close)  # (`close`加括号会默认执行一次)
-
-
-# 标签组件
-l1 = tk.Label(w1, text='ai', font=('黑体', 26), fg='white', bg='black')
-
-# 填充布局 pack() 默认布局:默认字体水平居中
-l1.pack()
-
-# 自定义布局 place(),注意不要超过窗口范围
-# l1.place(x=100, y=100)
-
-# 网格布局 grid()
-# l1.grid(row=1, column=1)
-# l1 = tk.Label(w1, text='ai', font=('黑体', 26), fg='white', bg='black')
-# l1.grid(row=2, column=2)
-
-# 窗口开启
-w1.mainloop()
+root = tk.Tk()
+myapp = Counter(root)
+root.mainloop()

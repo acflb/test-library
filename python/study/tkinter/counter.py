@@ -1,6 +1,6 @@
 import tkinter as tk
 
-
+# 继承tk的Frame类，意味着
 class Counter(tk.Frame):  # 继承 tk.Frame
     # '__init__'是 Python 类的构造函数（初始化方法），用于创建对象时自动执行初始化操作
     def __init__(self, master):  # 添加 master 参数
@@ -21,11 +21,12 @@ class Counter(tk.Frame):  # 继承 tk.Frame
         self.display = tk.Entry(
             self,
             textvariable=self.c,
-            font=('Arial', 28, 'bold'),
+            font=('Arial', 28, 'bold'),  # 大字体
             bg='#251f1a',
-            fg='#ffffff',
-            bd=0,
-            justify='right',
+            fg='#ffffff',  # 白色文字
+            bd=0,  # 无边框
+            justify='right',  # 右对齐
+            # 平面样式；‘relief’设置边框样式和三维外观：‘flat’：平坦的；‘sunken’：凹陷的；‘raised’：凸起的；‘groove’：凹槽；‘ridge’：凸槽
             relief='flat',
             insertwidth=0
         )
@@ -113,16 +114,12 @@ class Counter(tk.Frame):  # 继承 tk.Frame
                   text="=").grid(row=4, column=3)
 
 
-# 1. 创建主窗口
+# 创建根窗口，所有其他组件都将放置在这个窗口内
 root = tk.Tk()
 
-# 2. 创建 Counter 对象（自动执行 __init__）
+# 实例化Counter类的构造函数(def __init__(self,master))；
+# root作为作为参数传递给‘Counter’的构造函数，因此root成为了Counter实例的‘master’；
 myapp = Counter(root)
-# 相当于：
-# - Counter.__init__(myapp, root)
-# - super().__init__(root)  → myapp 是 Frame，属于 root
-# - self.pack()  → 将 myapp 显示在 root 中
-# - 创建所有按钮
 
-# 3. 启动事件循环
+# 启动事件循环
 root.mainloop()

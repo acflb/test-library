@@ -105,51 +105,61 @@ class Counter(tk.Frame):
                     self.display.insert(tk.END, '0')
                     self.cache = 1
 
+        gray_style = {
+            'font': ('黑体', 20, 'bold'),
+            'bg': '#403936',
+            'fg': '#ffffff',
+            'bd': 0,
+            'activebackground': '#403936',
+            'activeforeground': '#cfcecd',
+            'relief': 'flat'
+        }
+
         # 按钮
-        tk.Button(self, command=deleteMy, text="delete").grid(
-            row=1, column=3, sticky="nsew")
-        tk.Button(self, command=clear, text="clear").grid(
-            row=1, column=0, columnspan=3, sticky="nsew")
+        tk.Button(self, command=deleteMy, text="⌫", **gray_style).grid(
+            row=1, column=3, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=clear, text="C", **gray_style).grid(
+            row=1, column=0, columnspan=3, sticky="nsew", padx=2, pady=2)
 
         # 第二行：7 8 9 ÷
         tk.Button(self, command=lambda: click(7),
-                  text="7").grid(row=2, column=0, sticky="nsew")
+                  text="7", **gray_style).grid(row=2, column=0, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: click(8),
-                  text="8").grid(row=2, column=1, sticky="nsew")
+                  text="8", **gray_style).grid(row=2, column=1, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: click(9),
-                  text="9").grid(row=2, column=2, sticky="nsew")
+                  text="9", **gray_style).grid(row=2, column=2, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: change_symbol('+'),
-                  text="+").grid(row=2, column=3, sticky="nsew")
+                  text="+", **gray_style).grid(row=2, column=3, sticky="nsew", padx=2, pady=2)
 
         # 第三行
         tk.Button(self, command=lambda: click(4),
-                  text="4").grid(row=3, column=0, sticky="nsew")
+                  text="4", **gray_style).grid(row=3, column=0, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: click(5),
-                  text="5").grid(row=3, column=1, sticky="nsew")
+                  text="5", **gray_style).grid(row=3, column=1, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: click(6),
-                  text="6").grid(row=3, column=2, sticky="nsew")
+                  text="6", **gray_style).grid(row=3, column=2, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: change_symbol(
-            '-'), text="-").grid(row=3, column=3, sticky="nsew")
+            '-'), text="-", **gray_style).grid(row=3, column=3, sticky="nsew", padx=2, pady=2)
 
         # 第四行
         tk.Button(self, command=lambda: click(1),
-                  text="1").grid(row=4, column=0, sticky="nsew")
+                  text="1", **gray_style).grid(row=4, column=0, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: click(2),
-                  text="2").grid(row=4, column=1, sticky="nsew")
+                  text="2", **gray_style).grid(row=4, column=1, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: click(3),
-                  text="3").grid(row=4, column=2, sticky="nsew")
+                  text="3", **gray_style).grid(row=4, column=2, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: change_symbol(
-            'x'), text="x").grid(row=4, column=3, sticky="nsew")
+            'x'), text="x", **gray_style).grid(row=4, column=3, sticky="nsew", padx=2, pady=2)
 
         # 第五行
         tk.Button(self, command=lambda: click(0),
-                  text="0").grid(row=5, column=0, sticky="nsew")
-        tk.Button(self, command=lambda: click('.'), text=".").grid(
-            row=5, column=1, sticky="nsew")
+                  text="0", **gray_style).grid(row=5, column=0, sticky="nsew", padx=2, pady=2)
+        tk.Button(self, command=lambda: click('.'), text=".", **gray_style
+                  ).grid(row=5, column=1, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: change_symbol(
-            '/'), text="/").grid(row=5, column=2, sticky="nsew")
+            '/'), text="/", **gray_style).grid(row=5, column=2, sticky="nsew", padx=2, pady=2)
         tk.Button(self, command=lambda: result(),
-                  text="=").grid(row=5, column=3, sticky="nsew")
+                  text="=", **gray_style).grid(row=5, column=3, sticky="nsew", padx=2, pady=2)
 
 
 # 创建根窗口，所有其他组件都将放置在这个窗口内

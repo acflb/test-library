@@ -41,6 +41,7 @@ class Counter(tk.Frame):
         self.a = 0
         self.b = 0
         self.symbol = None
+        # 用于确认是否进行下一位数字储存
         self.cache = 1
 
         # sticky="nsew" = 拉伸填充;columnspan=4 = 这个元素横跨4列（显示屏要铺满）
@@ -49,17 +50,16 @@ class Counter(tk.Frame):
 
         def result():
             self.b = self.display.get()
-            if self.symbol == '+':
-                self.c.set(str(int(self.a) + int(self.b)))
-                self.symbol = None
-            elif self.symbol == '-':
-                self.c.set(str(int(self.a) - int(self.b)))
-                self.symbol = None
-            elif self.symbol == 'x':
-                self.c.set(str(int(self.a) * int(self.b)))
-                self.symbol = None
-            elif self.symbol == '/':
-                self.c.set(str(int(self.a) / int(self.b)))
+            operations = {
+                '+': lambda x, y: x + y,
+                '-': lambda x, y: x - y,
+                'x': lambda x, y: x * y,
+                '/': lambda x, y: x / y
+            }
+            if self.symbol in operations:
+                result = operations[self.symbol](float(self.a), float(self.b))
+                self.c.set(str(float(result)))
+                self.c.set(str(round(result, 10)))
                 self.symbol = None
             self.cache = 1
 
@@ -69,16 +69,27 @@ class Counter(tk.Frame):
             self.a = self.display.get()
 
         def click(a):
-            if self.cache:
-                # 清空显示，然后插入数字
-                self.display.delete(0, tk.END)
-                self.cache = 0
-            # self.c.set(str(a))
-            if self.display.get() == '0':
-                self.display.delete(0, tk.END)
-                self.display.insert(tk.END, a)
+
+            current = self.display.get()
+
+            if a == '.' and '.' in current:
+                return
+
+            if current == '0':
+                if a == '.':
+                    self.display.insert(tk.END, a)
+                    self.cache = 0
+                    return
+                else:
+                    if self.cache:
+                        self.display.delete(0, tk.END)
+                        self.cache = 0
             else:
-                self.display.insert(tk.END, a)
+                if self.cache:
+                    self.display.delete(0, tk.END)
+                    self.cache = 0
+
+            self.display.insert(tk.END, a)
 
         def clear():
             self.a = 0
@@ -133,7 +144,8 @@ class Counter(tk.Frame):
         # 第五行
         tk.Button(self, command=lambda: click(0),
                   text="0").grid(row=5, column=0, sticky="nsew")
-        tk.Button(self, text=".").grid(row=5, column=1, sticky="nsew")
+        tk.Button(self, command=lambda: click('.'), text=".").grid(
+            row=5, column=1, sticky="nsew")
         tk.Button(self, command=lambda: change_symbol(
             '/'), text="/").grid(row=5, column=2, sticky="nsew")
         tk.Button(self, command=lambda: result(),

@@ -9,6 +9,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QImage, QPixmap, QPainter, QFont
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 from PIL import Image
+
 import os
 
 

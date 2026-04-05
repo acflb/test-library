@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>英语48音标发音</title>
+		<style>
+			html,
+			body,
+			main,
+			section,
+			div,
+			button,
+			span,
+			p,
+			h1,
+			h2,
+			h3 {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+				background: #f5f7fb;
+				color: #1f2937;
+			}
+
+			.container {
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 24px;
+			}
+
+			h1 {
+				margin: 0 0 8px;
+				font-size: 30px;
+			}
+
+			.desc {
+				margin: 0 0 24px;
+				color: #4b5563;
+				font-size: 15px;
+			}
+
+			section {
+				background: #ffffff;
+				border-radius: 12px;
+				padding: 18px;
+				margin-bottom: 16px;
+				border: 1px solid #e5e7eb;
+			}
+
+			h2 {
+				margin: 0 0 10px;
+				font-size: 22px;
+			}
+
+			.group {
+				margin-top: 12px;
+			}
+
+			h3 {
+				margin: 0 0 8px;
+				font-size: 17px;
+				color: #374151;
+			}
+
+			.grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+				gap: 10px;
+			}
+
+			.card {
+				width: 100%;
+				border: 1px solid #d1d5db;
+				background: #ffffff;
+				border-radius: 10px;
+				padding: 10px 8px;
+				text-align: center;
+				cursor: pointer;
+				transition:
+					transform 0.15s ease,
+					border-color 0.15s ease,
+					box-shadow 0.15s ease;
+			}
+
+			.card:hover,
+			.card:focus-visible,
+			.card.playing {
+				border-color: #2563eb;
+				box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+				transform: translateY(-1px);
+				outline: none;
+			}
+
+			.symbol {
+				display: block;
+				font-size: 28px;
+				font-weight: 700;
+				line-height: 1.2;
+				margin-bottom: 6px;
+			}
+
+			.word {
+				display: block;
+				font-size: 14px;
+				color: #111827;
+			}
+
+			.tip {
+				margin-top: 8px;
+				font-size: 13px;
+				color: #6b7280;
+			}
+		</style>
+	</head>
+	<body>
+		<main class="container">
+			<h1>英语48音标发音表</h1>
+			<p class="desc">鼠标移入卡片自动发音（触屏设备可点击发音）。</p>
+
+			<section>
+				<h2>元音 20</h2>
+				<div class="group">
+					<h3>单元音 12</h3>
+					<div class="grid" id="monophthongs"></div>
+				</div>
+				<div class="group">
+					<h3>双元音 8</h3>
+					<div class="grid" id="diphthongs"></div>
+				</div>
+			</section>
+
+			<section>
+				<h2>辅音 28</h2>
+				<div class="group">
+					<h3>易 17（按英文字母顺序，去除 a/e/i/o/u/c/q/x/y）</h3>
+					<div class="grid" id="easyConsonants"></div>
+				</div>
+				<div class="group">
+					<h3>难 11（其余音标）</h3>
+					<div class="grid" id="hardConsonants"></div>
+				</div>
+				<p class="tip">提示:每张卡片显示音标 + 示例词，发音以示例词朗读近似对应音标。</p>
+			</section>
+		</main>
+
+		<audio id="audioPlayer" preload="none"></audio>
+
+		<script>
+			const groups = {
+				monophthongs: [
+					{ symbol: '/i:/', word: 'sheep' },
+					{ symbol: '/ɪ/', word: 'ship' },
+					{ symbol: '/e/', word: 'bed' },
+					{ symbol: '/æ/', word: 'cat' },
+					{ symbol: '/ʌ/', word: 'cup' },
+					{ symbol: '/ɜ:/', word: 'bird' },
+					{ symbol: '/ə/', word: 'about' },
+					{ symbol: '/u:/', word: 'food' },
+					{ symbol: '/ʊ/', word: 'book' },
+					{ symbol: '/ɔ:/', word: 'law' },
+					{ symbol: '/ɒ/', word: 'hot' },
+					{ symbol: '/ɑ:/', word: 'car' },
+				],
+				diphthongs: [
+					{ symbol: '/eɪ/', word: 'say' },
+					{ symbol: '/aɪ/', word: 'my' },
+					{ symbol: '/ɔɪ/', word: 'boy' },
+					{ symbol: '/aʊ/', word: 'now' },
+					{ symbol: '/əʊ/', word: 'go' },
+					{ symbol: '/ɪə/', word: 'ear' },
+					{ symbol: '/eə/', word: 'hair' },
+					{ symbol: '/ʊə/', word: 'tour' },
+				],
+				easyConsonants: [
+					{ symbol: '/b/', word: 'bag' },
+					{ symbol: '/d/', word: 'dog' },
+					{ symbol: '/f/', word: 'fish' },
+					{ symbol: '/g/', word: 'go' },
+					{ symbol: '/h/', word: 'hat' },
+					{ symbol: '/j/', word: 'yes' },
+					{ symbol: '/k/', word: 'kite' },
+					{ symbol: '/l/', word: 'love' },
+					{ symbol: '/m/', word: 'milk' },
+					{ symbol: '/n/', word: 'name' },
+					{ symbol: '/p/', word: 'pen' },
+					{ symbol: '/r/', word: 'red' },
+					{ symbol: '/s/', word: 'sun' },
+					{ symbol: '/t/', word: 'top' },
+					{ symbol: '/v/', word: 'voice' },
+					{ symbol: '/w/', word: 'wet' },
+					{ symbol: '/z/', word: 'zoo' },
+				],
+				hardConsonants: [
+					{ symbol: '/θ/', word: 'think' },
+					{ symbol: '/ð/', word: 'this' },
+					{ symbol: '/ʃ/', word: 'ship' },
+					{ symbol: '/ʒ/', word: 'vision' },
+					{ symbol: '/tʃ/', word: 'chair' },
+					{ symbol: '/dʒ/', word: 'judge' },
+					{ symbol: '/tr/', word: 'tree' },
+					{ symbol: '/dr/', word: 'drive' },
+					{ symbol: '/ts/', word: 'cats' },
+					{ symbol: '/dz/', word: 'beds' },
+					{ symbol: '/ŋ/', word: 'sing' },
+				],
+			};
+
+			const audioPlayer = document.getElementById('audioPlayer');
+			let activeCard = null;
+
+			function getWordAudioUrl(word) {
+				return `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
+			}
+
+			function speakByBrowser(word) {
+				if (!('speechSynthesis' in window)) {
+					return;
+				}
+				window.speechSynthesis.cancel();
+				const utterance = new SpeechSynthesisUtterance(word);
+				utterance.lang = 'en-US';
+				utterance.rate = 0.8;
+				utterance.pitch = 1;
+				window.speechSynthesis.speak(utterance);
+			}
+
+			function setActive(card) {
+				if (activeCard) {
+					activeCard.classList.remove('playing');
+				}
+				activeCard = card;
+				if (activeCard) {
+					activeCard.classList.add('playing');
+				}
+			}
+
+			async function pronounce(card, item) {
+				setActive(card);
+				audioPlayer.pause();
+				audioPlayer.currentTime = 0;
+				window.speechSynthesis?.cancel();
+
+				audioPlayer.src = getWordAudioUrl(item.word);
+				try {
+					await audioPlayer.play();
+				} catch (error) {
+					speakByBrowser(item.word);
+				}
+			}
+
+			audioPlayer.addEventListener('ended', () => setActive(null));
+			audioPlayer.addEventListener('error', () => {
+				if (activeCard) {
+					speakByBrowser(activeCard.dataset.word || '');
+				}
+			});
+
+			function createCards(containerId, list) {
+				const container = document.getElementById(containerId);
+				const fragment = document.createDocumentFragment();
+
+				list.forEach(item => {
+					const card = document.createElement('button');
+					card.type = 'button';
+					card.className = 'card';
+					card.dataset.word = item.word;
+					card.innerHTML = `<span class="symbol">${item.symbol}</span><span class="word">${item.word}</span>`;
+
+					const trigger = () => pronounce(card, item);
+					card.addEventListener('mouseenter', trigger);
+					card.addEventListener('focus', trigger);
+					card.addEventListener('click', trigger);
+
+					fragment.appendChild(card);
+				});
+
+				container.appendChild(fragment);
+			}
+
+			createCards('monophthongs', groups.monophthongs);
+			createCards('diphthongs', groups.diphthongs);
+			createCards('easyConsonants', groups.easyConsonants);
+			createCards('hardConsonants', groups.hardConsonants);
+		</script>
+	</body>
+</html>
